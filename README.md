@@ -18,7 +18,21 @@ This project aims to:
 - **Notebooks and scripts** to download intraday QQQ/TQQQ data and execute n‑minute ORB strategies.
 - **Backtesting engine** that simulates trades with realistic constraints.
 - **Performance metrics** including CAGR, Sharpe ratio, alpha versus benchmark and drawdown.
+
 - **Examples** illustrating how to run the pipeline and interpret the results.
+
+
+## Code overview
+
+This project includes a Jupyter notebook, `ORB_phased_research_pipeline_plots.ipynb`, that implements a phased research pipeline to evaluate the Opening Range Breakout strategy.  Key components include:
+
+- **Signal construction** – A helper function `build_orb_signals()` identifies the n‑minute opening range from intraday data and creates long/short signals when price breaks above or below that range.
+- **Fast backtesting** – `simulate_vectorbt()` wraps vectorbt to backtest these signals quickly with realistic trading frictions (spreads, slippage, commissions, borrow fees) and supports both cash‑based leverage and leveraged ETFs.
+- **Hyper‑parameter tuning** – A function `search_orb_parameters()` uses Optuna to search over parameters such as opening range duration, stop‑loss size and entry timing, optimizing metrics like alpha and Sharpe ratio.
+- **Helper utilities** – Additional functions load intraday data (using environment variables for API keys), generate monthly walk‑forward windows and compute performance metrics (CAGR, alpha, Sharpe ratio, drawdown).
+- **Phased workflow** – The notebook is divided into phases: `FAST R&D` runs vectorbt backtests and parameter search; `CONFIRMATION` (commented out) sketches a deterministic backtest using zipline‑reloaded; `ROBUSTNESS` (commented out) proposes using mlfinlab’s Purged Walk‑Forward cross‑validation for out‑of‑sample testing.
+
+No API keys or secrets are embedded in this notebook; data is accessed via environment variables (e.g., `POLYGON_API_KEY`, `ALPHA_VANTAGE_API_KEY`), so please set these locally before running.- **Examples** illustrating how to run the pipeline and interpret the results.
 
 ## Disclaimer
 This project is for educational and research purposes.  Past performance does not guarantee future results, and high leverage can magnify losses as well as gains.  Always do your own due diligence before trading or investing.
